@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Programação</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <i class="fas fa-brain"></i>
+      <span>QuizProg</span>
+    </div>
+    <ul class="navbar-links">
+      <li><a href="#" id="nav-link-quiz">Quiz</a></li>
+      <li><a href="#" id="nav-link-ranking">Ranking</a></li>
+    </ul>
+  </nav>
+
+  <div id="tela-inicial" class="tela">
+    <header>
+      <h1>Bem-vindo ao Quiz de Programação!</h1>
+      <p>Teste seus conhecimentos e descubra sua área.</p>
+    </header>
+    <main>
+      <button id="btn-iniciar-avaliacao" class="btn-selecao">Fazer Teste de Nivelamento</button>
+      <button id="btn-ir-para-temas" class="btn-selecao">Ir Direto para os Temas</button>
+      <button id="btn-ver-ranking" class="btn-voltar" style="padding-top: 1rem; font-weight: bold;">Ver Ranking</button>
+    </main>
+  </div>
+
+  <div id="tela-avaliacao" class="tela escondido">
+    <header>
+      <h1>Teste de Nivelamento</h1>
+      <p>Responda algumas perguntas para descobrirmos a sua área ideal!</p>
+    </header>
+    <main id="container-opcoes-avaliacao"></main>
+  </div>
+
+  <div id="tela-resultado-avaliacao" class="tela escondido">
+    <header>
+      <h1>Resultado do Teste</h1>
+      <p>Com base nas suas respostas, sua área ideal é:</p>
+      <h2 id="tema-sugerido" style="font-size: 2.5rem; margin-top: 1rem;"></h2>
+    </header>
+    <main>
+      <button id="btn-continuar-para-niveis">Escolher Nível e Começar</button>
+      <button id="btn-ver-outros-temas" class="btn-voltar">Ou ver outros temas</button>
+    </main>
+  </div>
+
+  <div id="tela-temas" class="tela escondido">
+    <header>
+      <h1>Escolha um Tema</h1>
+    </header>
+    <main id="temas-container">
+      <button class="btn-selecao" data-tema="dados">
+        <div class="btn-tema-content"><i class="fas fa-database"></i> Área de Dados</div>
+        <div class="info-container"><i class="fas fa-info-circle"></i><span class="tooltip-text">Análise, engenharia e
+            visualização de dados com SQL, Python e Power BI.</span></div>
+      </button>
+      <button class="btn-selecao" data-tema="frontend">
+        <div class="btn-tema-content"><i class="fas fa-desktop"></i> Frontend</div>
+        <div class="info-container"><i class="fas fa-info-circle"></i><span class="tooltip-text">Criação da interface
+            visual e interativa de sites e aplicações web com HTML, CSS e JavaScript.</span></div>
+      </button>
+      <button class="btn-selecao" data-tema="backend">
+        <div class="btn-tema-content"><i class="fas fa-server"></i> Backend</div>
+        <div class="info-container"><i class="fas fa-info-circle"></i><span class="tooltip-text">Desenvolvimento da
+            lógica do servidor, APIs e gerenciamento de bancos de dados.</span></div>
+      </button>
+      <button class="btn-selecao" data-tema="devops">
+        <div class="btn-tema-content"><i class="fas fa-cloud-upload-alt"></i> DevOps</div>
+        <div class="info-container"><i class="fas fa-info-circle"></i><span class="tooltip-text">Automação de
+            infraestrutura, integração e entrega contínua (CI/CD) para agilizar o desenvolvimento.</span></div>
+      </button>
+    </main>
+    <button id="btn-voltar-para-avaliacao" class="btn-voltar">Fazer o teste de nivelamento</button>
+  </div>
+
+  <div id="tela-niveis" class="tela escondido">
+    <header>
+      <h1 id="titulo-tema-selecionado"></h1>
+    </header>
+    <main id="niveis-container">
+      <button class="btn-selecao" data-nivel="estagiario" data-multiplicador="1"><i class="fas fa-baby"></i> Estagiário
+        (Muito Fácil) <span class="multiplicador">1x</span></button>
+      <button class="btn-selecao" data-nivel="junior" data-multiplicador="1.5"><i class="fas fa-graduation-cap"></i>
+        Júnior (Fácil) <span class="multiplicador">1.5x</span></button>
+      <button class="btn-selecao" data-nivel="pleno" data-multiplicador="2"><i class="fas fa-briefcase"></i> Pleno
+        (Médio) <span class="multiplicador">2x</span></button>
+      <button class="btn-selecao" data-nivel="senior" data-multiplicador="3"><i class="fas fa-crown"></i> Sênior
+        (Difícil) <span class="multiplicador">3x</span></button>
+    </main>
+    <button id="btn-voltar-para-temas" class="btn-voltar">Voltar para escolher o Tema</button>
+  </div>
+
+  <div id="tela-quiz" class="tela escondido">
+    <header>
+      <h2 id="info-quiz"></h2>
+      <p id="pontuacao">Pontos: 0</p>
+    </header>
+    <main>
+      <div id="container-pergunta">
+        <p id="texto-pergunta"></p>
+      </div>
+      <div id="container-opcoes"></div>
+    </main>
+    <button id="btn-proxima-pergunta" style="display: none;">Próxima</button>
+    <button id="btn-voltar-do-quiz" class="btn-voltar">Sair do Quiz</button>
+  </div>
+
+  <div id="tela-resultado" class="tela escondido">
+    <header>
+      <h1>Fim de Jogo!</h1>
+      <p>Sua pontuação final foi:</p>
+      <h2 id="pontuacao-final">0</h2>
+    </header>
+    <main id="form-ranking">
+      <input type="text" id="input-nome-jogador" placeholder="Digite seu nome para o ranking">
+      <button id="btn-salvar-pontuacao">Salvar e Ver Ranking</button>
+    </main>
+    <button id="btn-jogar-novamente-resultado" class="btn-voltar">Jogar Novamente</button>
+  </div>
+
+  <div id="tela-ranking" class="tela escondido">
+    <header>
+      <h1><i class="fas fa-trophy"></i> Ranking</h1>
+    </header>
+    <main>
+      <ol id="lista-ranking"></ol>
+    </main>
+    <button id="btn-voltar-do-ranking" class="btn-voltar">Voltar ao Início</button>
+  </div>
+
+  <script src="js/questoes.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
