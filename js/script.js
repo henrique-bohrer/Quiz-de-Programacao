@@ -1,3 +1,8 @@
+// --- INICIALIZAÇÃO DO FIREBASE ---
+// Garanta que o objeto 'firebaseConfig' esteja definido no seu arquivo firebase-config.js
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database(); // Referência para o nosso Realtime Database
+
 // --- SELEÇÃO DE ELEMENTOS DO HTML ---
 const telaInicial = document.getElementById('tela-inicial');
 const telaTemas = document.getElementById('tela-temas');
@@ -64,16 +69,20 @@ function carregarProximaPergunta() {
     gameState.opcaoSelecionadaIndex = null;
     btnProximaPergunta.style.display = 'none';
     btnProximaPergunta.textContent = 'Confirmar Resposta';
+
     const { tema, nivel, perguntaAtual } = gameState;
-    const perguntas = bancoDeQuestoes[tema][nivel];
-    if (!perguntas || perguntas.length === 0) {
-        alert(`Desculpe, ainda não há perguntas para o tema '${tema}' no nível '${nivel}'.`);
+    const perguntas = bancoDeQuestoes[tema]?.[nivel] || [];
+
+    if (perguntas.length === 0) {
+        alert(`Desculpe, ainda não há perguntas para o tema '${tema}' no nível '${nivel}'. Voltando ao início.`);
         resetarJogo();
         return;
     }
+
     const perguntaObj = perguntas[perguntaAtual];
     textoPergunta.textContent = perguntaObj.pergunta;
     containerOpcoes.innerHTML = '';
+
     perguntaObj.opcoes.forEach((opcao, index) => {
         const botao = document.createElement('button');
         botao.className = 'btn-opcao';
@@ -97,10 +106,12 @@ function checarResposta() {
     const respostaCorretaIndex = perguntaObj.resposta;
     const todosOsBotoes = containerOpcoes.querySelectorAll('.btn-opcao');
     const botaoSelecionado = todosOsBotoes[opcaoSelecionadaIndex];
+
     todosOsBotoes.forEach(btn => {
         btn.disabled = true;
         btn.classList.remove('selecionada');
     });
+
     if (opcaoSelecionadaIndex === respostaCorretaIndex) {
         botaoSelecionado.classList.add('correta');
         gameState.pontuacao += (10 * multiplicador);
@@ -109,6 +120,7 @@ function checarResposta() {
         botaoSelecionado.classList.add('errada');
         todosOsBotoes[respostaCorretaIndex].classList.add('correta');
     }
+
     btnProximaPergunta.textContent = 'Próxima Pergunta';
 }
 
@@ -158,47 +170,67 @@ function finalizarTesteAvaliacao() {
     mostrarTela(telaResultadoAvaliacao);
 }
 
-// --- FUNÇÕES DO RANKING ---
+// --- FUNÇÕES DO RANKING (FIREBASE) ---
 function salvarPontuacao() {
     const nomeJogador = inputNomeJogador.value.trim();
-    if (!nomeJogador) { alert("Por favor, digite um nome!"); return; }
+    if (!nomeJogador) {
+        alert("Por favor, digite um nome!");
+        return;
+    }
     const novaPontuacao = {
-        nome: nomeJogador, pontuacao: gameState.pontuacao,
+        nome: nomeJogador,
+        pontuacao: gameState.pontuacao,
         tema: gameState.tema.charAt(0).toUpperCase() + gameState.tema.slice(1),
-        nivel: gameState.nivel.charAt(0).toUpperCase() + gameState.nivel.slice(1)
+        nivel: gameState.nivel.charAt(0).toUpperCase() + gameState.nivel.slice(1),
+        pontuacaoNegativa: -gameState.pontuacao
     };
-    const ranking = JSON.parse(localStorage.getItem('quizRanking')) || [];
-    ranking.push(novaPontuacao);
-    ranking.sort((a, b) => b.pontuacao - a.pontuacao);
-    ranking.splice(10);
-    localStorage.setItem('quizRanking', JSON.stringify(ranking));
-    mostrarRanking();
+    const novaPontuacaoRef = db.ref('ranking').push();
+    novaPontuacaoRef.set(novaPontuacao)
+        .then(() => {
+            console.log("Pontuação salva com sucesso!");
+            mostrarRanking();
+        })
+        .catch((error) => {
+            console.error("Erro ao salvar pontuação: ", error);
+            alert("Não foi possível salvar sua pontuação. Tente novamente.");
+        });
 }
 
 function mostrarRanking() {
-    const ranking = JSON.parse(localStorage.getItem('quizRanking')) || [];
-    listaRanking.innerHTML = '';
-    if (ranking.length === 0) {
-        listaRanking.innerHTML = '<li><p>Nenhuma pontuação registrada ainda. Jogue uma partida!</p></li>';
-    } else {
-        ranking.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span class="ranking-nome">${index + 1}. ${item.nome}</span>
-                <div class="ranking-info">
-                    <span>${item.tema} (${item.nivel})</span>
-                    <span class="ranking-pontos">${item.pontuacao} pts</span>
-                </div>
-            `;
-            listaRanking.appendChild(li);
-        });
-    }
+    const rankingRef = db.ref('ranking');
+    const consultaRanking = rankingRef.orderByChild('pontuacaoNegativa').limitToFirst(10);
+
+    consultaRanking.on('value', (snapshot) => {
+        listaRanking.innerHTML = '';
+        if (!snapshot.exists()) {
+            listaRanking.innerHTML = '<li><p>Nenhuma pontuação registrada ainda. Seja o primeiro!</p></li>';
+        } else {
+            const ranking = [];
+            snapshot.forEach((childSnapshot) => {
+                ranking.push(childSnapshot.val());
+            });
+            ranking.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="ranking-nome">${index + 1}. ${item.nome}</span>
+                    <div class="ranking-info">
+                        <span>${item.tema} (${item.nivel})</span>
+                        <span class="ranking-pontos">${item.pontuacao} pts</span>
+                    </div>
+                `;
+                listaRanking.appendChild(li);
+            });
+        }
+    }, (error) => {
+        console.error("Erro ao carregar o ranking: ", error);
+        listaRanking.innerHTML = '<li><p>Não foi possível carregar o ranking.</p></li>';
+    });
     mostrarTela(telaRanking);
 }
 
 // --- LÓGICA DE NAVEGAÇÃO E EVENT LISTENERS ---
 btnIniciarAvaliacao.addEventListener('click', iniciarTesteAvaliacao);
-btnIrParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas) });
+btnIrParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
 btnJogarNovamenteResultado.addEventListener('click', resetarJogo);
 btnVoltarParaTemas.addEventListener('click', () => mostrarTela(telaTemas));
 btnVoltarDoQuiz.addEventListener('click', () => mostrarTela(telaNiveis));
