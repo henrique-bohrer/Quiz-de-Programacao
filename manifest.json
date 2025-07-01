@@ -1,0 +1,21 @@
+{
+  "name": "QuizProg - Quiz de Programação",
+  "short_name": "QuizProg",
+  "description": "Um quiz interativo para testar seus conhecimentos de programação.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a1a",
+  "theme_color": "#8a63d2",
+  "icons": [
+    {
+      "src": "images/Design sem nome (5).png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "images/Design sem nome (5).png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
