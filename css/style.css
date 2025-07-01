@@ -1,210 +1,200 @@
-/* --- FONTES E VARIÁVEIS GLOBAIS --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+/* ==========================================================================
+   1. CONFIGURAÇÕES GLOBAIS E VARIÁVEIS
+   ========================================================================== */
 
-:root {
-    --cor-fundo: #0a0a1a;
-    --cor-card-fundo: rgba(30, 30, 45, 0.6);
-    --cor-card-borda: rgba(255, 255, 255, 0.15);
-    --cor-texto-principal: #f5f5f5;
-    --cor-texto-secundario: #a0a0b0;
-    --cor-botao-padrao: #3a3a5a;
-    --cor-botao-hover: #4a4a6a;
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 
-    /* Cor de acento padrão */
-    --cor-acento: #8a63d2;
-    --cor-acento-texto: #fff;
-    --cor-acento-rgb: 138, 99, 210;
-}
+   :root {
+       --cor-fundo: #0a0a1a;
+       --cor-card-fundo: rgba(30, 30, 45, 0.6);
+       --cor-card-borda: rgba(255, 255, 255, 0.15);
+       --cor-texto-principal: #f5f5f5;
+       --cor-texto-secundario: #a0a0b0;
+       --cor-botao-padrao: #3a3a5a;
+       --cor-botao-hover: #4a4a6a;
 
-/* --- ESTILOS GLOBAIS --- */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+       /* Cor de acento padrão (sobrescrita pelos temas) */
+       --cor-acento: #8a63d2;
+       --cor-acento-texto: #fff;
+       --cor-acento-rgb: 138, 99, 210;
+   }
 
-html { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-.navbar {
-  position: fixed; /* Fixa a navbar no topo da tela */
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 1rem 5%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100; /* Garante que ela fique acima de outros elementos */
+   html { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
 
-  /* Efeito de vidro para combinar com o tema */
-  background: rgba(10, 10, 26, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--cor-card-borda);
-}
+   body {
+       background-color: var(--cor-fundo);
+       background-image: radial-gradient(circle at top right, rgba(138, 99, 210, 0.2), transparent 40%),
+                         radial-gradient(circle at bottom left, rgba(50, 150, 250, 0.2), transparent 50%);
+       min-height: 100vh;
+       color: var(--cor-texto-principal);
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       padding: 1rem;
+       padding-top: 80px; /* Espaço para a navbar fixa */
+       transition: background-image 0.5s ease;
+   }
 
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--cor-acento);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-shadow: 0 0 10px rgba(var(--cor-acento-rgb), 0.3);
-}
+   /* ==========================================================================
+      2. ANIMAÇÕES
+      ========================================================================== */
+   @keyframes fadeInUp {
+       from { opacity: 0; transform: translateY(20px); }
+       to { opacity: 1; transform: translateY(0); }
+   }
 
-.navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 2rem;
-}
+   /* ==========================================================================
+      3. LAYOUT PRINCIPAL
+      ========================================================================== */
+   .tela {
+       width: 90%;
+       max-width: 700px;
+       background: var(--cor-card-fundo);
+       border: 1px solid var(--cor-card-borda);
+       border-radius: 20px;
+       padding: 2.5rem 3rem;
+       backdrop-filter: blur(12px);
+       -webkit-backdrop-filter: blur(12px);
+       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+       text-align: center;
+       animation: fadeInUp 0.6s ease-out;
+   }
+   .escondido { display: none; }
+   .tela header { margin-bottom: 2rem; }
 
-.navbar-links a {
-  text-decoration: none;
-  color: var(--cor-texto-secundario);
-  font-weight: bold;
-  padding: 0.5rem 0;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
-}
+   /* Contêineres que espaçam botões verticalmente */
+   #tela-inicial main,
+   #temas-container,
+   #niveis-container,
+   #container-opcoes,
+   #container-opcoes-avaliacao,
+   #tela-resultado-avaliacao main,
+   #form-ranking,
+   #tela-ranking main {
+       display: flex;
+       flex-direction: column;
+       width: 100%;
+       gap: 1rem;
+   }
 
-.navbar-links a:hover {
-  color: var(--cor-acento);
-  border-bottom-color: var(--cor-acento);
-}
+   /* ==========================================================================
+      4. COMPONENTES DE UI
+      ========================================================================== */
 
-body {
-    background-color: var(--cor-fundo);
-    background-image: radial-gradient(circle at top right, rgba(138, 99, 210, 0.2), transparent 40%),
-                      radial-gradient(circle at bottom left, rgba(50, 150, 250, 0.2), transparent 50%);
-    min-height: 100vh;
-    color: var(--cor-texto-principal);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    padding-top: 80px;
-    transition: background-image 0.5s ease;
-}
+   /* --- Tipografia --- */
+   h1 { font-size: 2.5rem; font-weight: 900; color: var(--cor-acento); text-shadow: 0 0 10px rgba(var(--cor-acento-rgb), 0.3); transition: color 0.3s ease, text-shadow 0.3s ease; }
+   h2 { font-size: 1.8rem; font-weight: 700; }
+   p { font-size: 1.1rem; color: var(--cor-texto-secundario); line-height: 1.6; margin-top: .5rem; }
 
-/* --- ANIMAÇÕES --- */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+   /* --- Botão Base --- */
+   button { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 700; letter-spacing: .5px; border-radius: 12px; cursor: pointer; transition: all .2s ease; border: 2px solid transparent; }
 
-/* --- LAYOUT PRINCIPAL (GLASSMORPHISM) --- */
-.tela {
-    width: 90%;
-    max-width: 700px;
-    background: var(--cor-card-fundo);
-    border: 1px solid var(--cor-card-borda);
-    border-radius: 20px;
-    padding: 2.5rem 3rem;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    text-align: center;
-    animation: fadeInUp 0.6s ease-out;
-}
-.escondido { display: none; }
-.tela header { margin-bottom: 2rem; }
+   /* --- Tipos de Botão --- */
+   .btn-solid { background-color: var(--cor-botao-padrao); color: var(--cor-texto-principal); border-color: var(--cor-botao-padrao); }
+   .btn-solid:hover:not(:disabled) { background-color: var(--cor-botao-hover); border-color: var(--cor-botao-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 
-/* --- CONTÊINERES DE BOTÕES --- */
-#tela-inicial main,
-#temas-container,
-#niveis-container,
-#container-opcoes,
-#container-opcoes-avaliacao,
-#tela-resultado-avaliacao main,
-#form-ranking {
-    display: flex;
-    flex-direction: column;
+   .btn-selecao { background-color: rgba(0,0,0,0.2); color: var(--cor-texto-secundario); display: flex; align-items: center; gap: .75rem; }
+   .btn-selecao[data-tema] { justify-content: space-between; position: relative; }
+   .btn-selecao[data-nivel] { justify-content: space-between; }
+   #btn-iniciar-avaliacao, #btn-ir-para-temas { justify-content: center; }
+
+   .btn-voltar { background-color: transparent; color: var(--cor-texto-secundario); border: none; padding-top: 1rem; }
+   .btn-voltar:hover { color: var(--cor-acento); }
+
+   /* --- Efeitos de Hover para Botões de Seleção --- */
+   .btn-selecao[data-tema]:hover    { background-color: rgba(255, 202, 40, 0.15); border-color: #ffca28; color: #ffca28; transform: scale(1.02); box-shadow: 0 0 15px rgba(255, 202, 40, 0.3); }
+   .btn-selecao[data-tema]:hover .info-container { color: #ffca28; }
+   .btn-selecao[data-tema=frontend]:hover { background-color: rgba(97,218,251,0.15); border-color: #61dafb; color: #61dafb; transform: scale(1.02); box-shadow: 0 0 15px rgba(97,218,251,0.3); }
+   .btn-selecao[data-tema=frontend]:hover .info-container { color: #61dafb; }
+   .btn-selecao[data-tema=backend]:hover  { background-color: rgba(106,204,110,0.15); border-color: #6acc6e; color: #6acc6e; transform: scale(1.02); box-shadow: 0 0 15px rgba(106,204,110,0.3); }
+   .btn-selecao[data-tema=backend]:hover .info-container { color: #6acc6e; }
+   .btn-selecao[data-tema=devops]:hover   { background-color: rgba(245,124,0,0.15); border-color: #f57c00; color: #f57c00; transform: scale(1.02); box-shadow: 0 0 15px rgba(245,124,0,0.3); }
+   .btn-selecao[data-tema=devops]:hover .info-container { color: #f57c00; }
+
+   .btn-selecao[data-nivel]:hover { background-color: rgba(var(--cor-acento-rgb),0.15); border-color: var(--cor-acento); color: var(--cor-acento); transform: scale(1.02); box-shadow: 0 0 15px rgba(var(--cor-acento-rgb),0.3); }
+   #btn-iniciar-avaliacao:hover, #btn-ir-para-temas:hover { background-color: rgba(var(--cor-acento-rgb),0.15); border-color: var(--cor-acento); color: var(--cor-acento); transform: scale(1.02); box-shadow: 0 0 15px rgba(var(--cor-acento-rgb),0.3); }
+
+   /* --- Componentes Específicos --- */
+   #btn-proxima-pergunta { margin-top: 2rem; }
+   .btn-selecao[data-nivel] .multiplicador { font-size: .9rem; font-weight: 400; background-color: rgba(0,0,0,0.2); padding: .2rem .5rem; border-radius: 5px; }
+   .btn-tema-content { display: flex; align-items: center; gap: .75rem; }
+   .info-container { color: var(--cor-texto-secundario); font-size: 1.1rem; transition: color 0.2s ease-in-out; }
+   .tooltip-text { visibility: hidden; opacity: 0; width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 6px; padding: 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; transition: opacity .3s; font-size: .9rem; font-weight: 400; }
+   .info-container:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+   .btn-opcao { background-color: transparent; border-color: var(--cor-card-borda); color: var(--cor-texto-secundario); }
+   .btn-opcao:hover:not(:disabled) { background-color: var(--cor-acento); border-color: var(--cor-acento); color: var(--cor-acento-texto); }
+   .btn-opcao.selecionada { background-color: rgba(var(--cor-acento-rgb),0.25); border-width: 3px; border-color: var(--cor-acento); color: var(--cor-acento); }
+
+   .btn-opcao.correta { background-color: #27ae60; border-color: #1e8449; color: #fff; font-weight: 700; }
+   .btn-opcao.errada { background-color: #c0392b; border-color: #942e23; color: #fff; font-weight: 700; }
+   .btn-opcao:disabled { cursor: not-allowed; }
+   .btn-opcao:disabled:not(.correta):not(.errada) { opacity: .4; }
+
+   input[type="text"] {
     width: 100%;
-    gap: 1rem;
-}
-
-/* --- COMPONENTES --- */
-h1 { font-size: 2.5rem; font-weight: 900; color: var(--cor-acento); text-shadow: 0 0 10px rgba(var(--cor-acento-rgb), 0.3); transition: color 0.3s ease, text-shadow 0.3s ease; }
-h2 { font-size: 1.8rem; font-weight: 700; }
-p { font-size: 1.1rem; color: var(--cor-texto-secundario); line-height: 1.6; margin-top: 0.5rem; }
-
-button { width: 100%; padding: 1rem; font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; border-radius: 12px; cursor: pointer; transition: all 0.2s ease; border: 2px solid transparent; }
-input[type="text"] { width: 100%; background-color: rgba(0, 0, 0, 0.2); border: 2px solid var(--cor-card-borda); color: var(--cor-texto-principal); padding: 1rem; border-radius: 12px; font-size: 1rem; font-weight: 500; }
-input[type="text"]::placeholder { color: var(--cor-texto-secundario); }
-input[type="text"]:focus { outline: none; border-color: var(--cor-acento); }
-
-/* Botões de Seleção (Início, Tema, Nível) */
-.btn-selecao {
     background-color: rgba(0, 0, 0, 0.2);
-    border: 2px solid transparent;
-    color: var(--cor-texto-secundario);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    border: 2px solid var(--cor-card-borda);
+    color: var(--cor-texto-principal);
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
 }
-.btn-selecao[data-tema] { justify-content: space-between; position: relative; }
-.btn-selecao[data-nivel] { justify-content: space-between; }
-#btn-iniciar-avaliacao, #btn-ir-para-temas { justify-content: center; }
-.btn-selecao[data-nivel] .multiplicador { font-size: 0.9rem; font-weight: normal; background-color: rgba(0, 0, 0, 0.2); padding: 0.2rem 0.5rem; border-radius: 5px; }
 
-/* Hover dos botões de Tema (usa data-attribute) */
-.btn-selecao[data-tema="dados"]:hover    { background-color: rgba(255, 202, 40, 0.15); border-color: #ffca28; color: #ffca28; transform: scale(1.02); box-shadow: 0 0 15px rgba(255, 202, 40, 0.3); }
-.btn-selecao[data-tema="frontend"]:hover { background-color: rgba(97, 218, 251, 0.15); border-color: #61dafb; color: #61dafb; transform: scale(1.02); box-shadow: 0 0 15px rgba(97, 218, 251, 0.3); }
-.btn-selecao[data-tema="backend"]:hover  { background-color: rgba(106, 204, 110, 0.15); border-color: #6acc6e; color: #6acc6e; transform: scale(1.02); box-shadow: 0 0 15px rgba(106, 204, 110, 0.3); }
-.btn-selecao[data-tema="devops"]:hover   { background-color: rgba(245, 124, 0, 0.15); border-color: #f57c00; color: #f57c00; transform: scale(1.02); box-shadow: 0 0 15px rgba(245, 124, 0, 0.3); }
+/* Estilo para o texto de placeholder */
+input[type="text"]::placeholder {
+    color: var(--cor-texto-secundario);
+}
 
-/* Hover dos botões Iniciais e de Nível (usa variável do tema ativo ou padrão) */
-#btn-iniciar-avaliacao:hover,
-#btn-ir-para-temas:hover,
-.btn-selecao[data-nivel]:hover {
-    background-color: rgba(var(--cor-acento-rgb), 0.15);
+/* Efeito de foco, para quando o usuário clica na caixa */
+input[type="text"]:focus {
+    outline: none;
     border-color: var(--cor-acento);
-    color: var(--cor-acento);
-    transform: scale(1.02);
     box-shadow: 0 0 15px rgba(var(--cor-acento-rgb), 0.3);
 }
 
-/* Info e Tooltips */
-.btn-tema-content { display: flex; align-items: center; gap: 0.75rem; }
-.info-container { color: var(--cor-texto-secundario); font-size: 1.1rem; }
-.tooltip-text { visibility: hidden; opacity: 0; width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 6px; padding: 10px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; transition: opacity 0.3s; font-size: 0.9rem; font-weight: normal; }
-.info-container:hover .tooltip-text { visibility: visible; opacity: 1; }
-
-/* Botões de Opção do Quiz */
-.btn-opcao { background-color: transparent; border-color: var(--cor-card-borda); color: var(--cor-texto-secundario); }
-.btn-opcao:hover:not(:disabled) { background-color: var(--cor-acento); border-color: var(--cor-acento); color: var(--cor-acento-texto); }
-.btn-opcao.selecionada { background-color: rgba(var(--cor-acento-rgb), 0.25); border-width: 3px; border-color: var(--cor-acento); color: var(--cor-acento); }
-
-/* Feedback de Resposta */
-.btn-opcao.correta { background-color: #27ae60; border-color: #1e8449; color: #fff; font-weight: bold; }
-.btn-opcao.errada { background-color: #c0392b; border-color: #942e23; color: #fff; font-weight: bold; }
-.btn-opcao:disabled { cursor: not-allowed; }
-.btn-opcao:disabled:not(.correta):not(.errada) { opacity: 0.4; }
-
-/* Botões de Ação Principal */
-#btn-proxima-pergunta, #btn-continuar-para-niveis, #btn-salvar-pontuacao { background-color: var(--cor-botao-padrao); color: var(--cor-texto-principal); border-color: var(--cor-botao-padrao); }
-#btn-proxima-pergunta:hover:not(:disabled), #btn-continuar-para-niveis:hover:not(:disabled), #btn-salvar-pontuacao:hover { background-color: var(--cor-botao-hover); border-color: var(--cor-botao-hover); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
-#btn-proxima-pergunta { margin-top: 2rem; }
-
-/* Botões de Voltar/Sair */
-.btn-voltar { background-color: transparent; color: var(--cor-texto-secundario); border: none; padding: 1rem; margin-top: 1rem;}
-.btn-voltar:hover { color: var(--cor-acento); }
-
-/* Estilos para o Ranking */
-#lista-ranking { list-style: none; padding: 0; width: 100%; }
-#lista-ranking li { background-color: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; border-left: 5px solid transparent; }
-#lista-ranking li:first-child { border-color: #ffd700; }
-#lista-ranking li:nth-child(2) { border-color: #c0c0c0; }
-#lista-ranking li:nth-child(3) { border-color: #cd7f32; }
-.ranking-nome { font-weight: bold; text-align: left; }
-.ranking-info { font-size: 0.9rem; color: var(--cor-texto-secundario); text-align: right; }
-.ranking-pontos { font-weight: bold; font-size: 1.2rem; color: var(--cor-acento); margin-left: 1rem; }
-
-/* --- CORES DOS TEMAS --- */
-body[data-active-theme="dados"]    { --cor-acento: #ffca28; --cor-acento-texto: #1c2533; --cor-acento-rgb: 255, 202, 40; }
-body[data-active-theme="frontend"] { --cor-acento: #61dafb; --cor-acento-texto: #1f2228; --cor-acento-rgb: 97, 218, 251; }
-body[data-active-theme="backend"]  { --cor-acento: #6acc6e; --cor-acento-texto: #1b3d1c; --cor-acento-rgb: 106, 204, 110; }
-body[data-active-theme="devops"]   { --cor-acento: #f57c00; --cor-acento-texto: #fff;    --cor-acento-rgb: 245, 124, 0; }
-
-/* --- RESPONSIVIDADE --- */
-@media (max-width: 768px) {
-    h1 { font-size: 2rem; }
-    .tela { padding: 2rem 1.5rem; }
+   /* --- Navbar --- */
+   .navbar { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(10,10,26,0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--cor-card-borda); }
+   .navbar-brand { font-size: 1.5rem; font-weight: 900; color: var(--cor-acento); display: flex; align-items: center; gap: .5rem; text-shadow: 0 0 10px rgba(var(--cor-acento-rgb),0.5); }
+   .navbar-links { list-style: none; display: flex; gap: 2rem; }
+   .navbar-links a { text-decoration: none; color: var(--cor-texto-secundario); font-weight: 700; padding: .5rem 0; border-bottom: 2px solid transparent; transition: all .2s ease; }
+   .navbar-links a:hover { color: var(--cor-acento); border-bottom-color: var(--cor-acento); }
+   .navbar-logo {
+    filter: drop-shadow(0 0 10px rgba(var(--cor-acento-rgb), 0.5));
+    height: 32px; /* Ajuste este valor se achar necessário */
+    width: auto;  /* Mantém a proporção da imagem */
 }
+
+
+   /* --- Ranking --- */
+   #lista-ranking { list-style: none; padding: 0; width: 100%; }
+   #lista-ranking li { background-color: rgba(0,0,0,0.2); border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: .75rem; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; border-left: 5px solid transparent; }
+   #lista-ranking li:first-child { border-color: #ffd700; }
+   #lista-ranking li:nth-child(2) { border-color: #c0c0c0; }
+   #lista-ranking li:nth-child(3) { border-color: #cd7f32; }
+   .ranking-nome { font-weight: 700; text-align: left; }
+   .ranking-info { font-size: .9rem; color: var(--cor-texto-secundario); text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+   .ranking-pontos { font-weight: 700; font-size: 1.2rem; color: var(--cor-acento); margin-left: 1rem; }
+
+   /* ==========================================================================
+      5. CORES DOS TEMAS
+      ========================================================================== */
+   body[data-active-theme="dados"]    { --cor-acento: #ffca28; --cor-acento-texto: #1c2533; --cor-acento-rgb: 255, 202, 40; }
+   body[data-active-theme="frontend"] { --cor-acento: #61dafb; --cor-acento-texto: #1f2228; --cor-acento-rgb: 97, 218, 251; }
+   body[data-active-theme="backend"]  { --cor-acento: #6acc6e; --cor-acento-texto: #1b3d1c; --cor-acento-rgb: 106, 204, 110; }
+   body[data-active-theme="devops"]   { --cor-acento: #f57c00; --cor-acento-texto: #fff;    --cor-acento-rgb: 245, 124, 0; }
+
+   /* ==========================================================================
+      6. RESPONSIVIDADE
+      ========================================================================== */
+   @media (max-width: 768px) {
+       h1 { font-size: 2rem; }
+       .tela { padding: 2rem 1.5rem; }
+       .navbar { padding: 1rem 2rem; }
+       .navbar-links { gap: 1rem; }
+   }

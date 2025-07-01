@@ -69,20 +69,16 @@ function carregarProximaPergunta() {
     gameState.opcaoSelecionadaIndex = null;
     btnProximaPergunta.style.display = 'none';
     btnProximaPergunta.textContent = 'Confirmar Resposta';
-
     const { tema, nivel, perguntaAtual } = gameState;
     const perguntas = bancoDeQuestoes[tema]?.[nivel] || [];
-
-    if (perguntas.length === 0) {
+    if (!perguntas || perguntas.length === 0 || !perguntas[perguntaAtual]) {
         alert(`Desculpe, ainda não há perguntas para o tema '${tema}' no nível '${nivel}'. Voltando ao início.`);
         resetarJogo();
         return;
     }
-
     const perguntaObj = perguntas[perguntaAtual];
     textoPergunta.textContent = perguntaObj.pergunta;
     containerOpcoes.innerHTML = '';
-
     perguntaObj.opcoes.forEach((opcao, index) => {
         const botao = document.createElement('button');
         botao.className = 'btn-opcao';
@@ -106,12 +102,10 @@ function checarResposta() {
     const respostaCorretaIndex = perguntaObj.resposta;
     const todosOsBotoes = containerOpcoes.querySelectorAll('.btn-opcao');
     const botaoSelecionado = todosOsBotoes[opcaoSelecionadaIndex];
-
     todosOsBotoes.forEach(btn => {
         btn.disabled = true;
         btn.classList.remove('selecionada');
     });
-
     if (opcaoSelecionadaIndex === respostaCorretaIndex) {
         botaoSelecionado.classList.add('correta');
         gameState.pontuacao += (10 * multiplicador);
@@ -120,7 +114,6 @@ function checarResposta() {
         botaoSelecionado.classList.add('errada');
         todosOsBotoes[respostaCorretaIndex].classList.add('correta');
     }
-
     btnProximaPergunta.textContent = 'Próxima Pergunta';
 }
 
@@ -173,13 +166,9 @@ function finalizarTesteAvaliacao() {
 // --- FUNÇÕES DO RANKING (FIREBASE) ---
 function salvarPontuacao() {
     const nomeJogador = inputNomeJogador.value.trim();
-    if (!nomeJogador) {
-        alert("Por favor, digite um nome!");
-        return;
-    }
+    if (!nomeJogador) { alert("Por favor, digite um nome!"); return; }
     const novaPontuacao = {
-        nome: nomeJogador,
-        pontuacao: gameState.pontuacao,
+        nome: nomeJogador, pontuacao: gameState.pontuacao,
         tema: gameState.tema.charAt(0).toUpperCase() + gameState.tema.slice(1),
         nivel: gameState.nivel.charAt(0).toUpperCase() + gameState.nivel.slice(1),
         pontuacaoNegativa: -gameState.pontuacao
@@ -199,16 +188,13 @@ function salvarPontuacao() {
 function mostrarRanking() {
     const rankingRef = db.ref('ranking');
     const consultaRanking = rankingRef.orderByChild('pontuacaoNegativa').limitToFirst(10);
-
     consultaRanking.on('value', (snapshot) => {
         listaRanking.innerHTML = '';
         if (!snapshot.exists()) {
             listaRanking.innerHTML = '<li><p>Nenhuma pontuação registrada ainda. Seja o primeiro!</p></li>';
         } else {
             const ranking = [];
-            snapshot.forEach((childSnapshot) => {
-                ranking.push(childSnapshot.val());
-            });
+            snapshot.forEach((childSnapshot) => { ranking.push(childSnapshot.val()); });
             ranking.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.innerHTML = `
@@ -232,7 +218,7 @@ function mostrarRanking() {
 btnIniciarAvaliacao.addEventListener('click', iniciarTesteAvaliacao);
 btnIrParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
 btnJogarNovamenteResultado.addEventListener('click', resetarJogo);
-btnVoltarParaTemas.addEventListener('click', () => mostrarTela(telaTemas));
+btnVoltarParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
 btnVoltarDoQuiz.addEventListener('click', () => mostrarTela(telaNiveis));
 btnVoltarParaAvaliacao.addEventListener('click', resetarJogo);
 btnContinuarParaNiveis.addEventListener('click', () => {
@@ -244,16 +230,8 @@ btnVerOutrosTemas.addEventListener('click', () => { document.body.removeAttribut
 btnSalvarPontuacao.addEventListener('click', salvarPontuacao);
 btnVerRanking.addEventListener('click', mostrarRanking);
 btnVoltarDoRanking.addEventListener('click', resetarJogo);
-
-navLinkQuiz.addEventListener('click', (event) => {
-    event.preventDefault();
-    resetarJogo();
-});
-
-navLinkRanking.addEventListener('click', (event) => {
-    event.preventDefault();
-    mostrarRanking();
-});
+navLinkQuiz.addEventListener('click', (event) => { event.preventDefault(); resetarJogo(); });
+navLinkRanking.addEventListener('click', (event) => { event.preventDefault(); mostrarRanking(); });
 
 const botoesTema = temasContainer.querySelectorAll('.btn-selecao[data-tema]');
 botoesTema.forEach(botao => {

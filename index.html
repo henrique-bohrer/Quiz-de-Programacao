@@ -5,16 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz de Programação</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="shortcut icon" type="imagex/png" href="/images/Design sem nome (5).png">
+  <link rel="icon" type="image/png" href="images/Design sem nome (5).png">
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
   <nav class="navbar">
     <div class="navbar-brand">
-      <i class="fas fa-brain"></i>
+      <img src="images/Design sem nome (5).png" alt="Logo QuizProg" class="navbar-logo">
       <span>QuizProg</span>
     </div>
     <ul class="navbar-links">
@@ -55,7 +56,7 @@
       <h2 id="tema-sugerido" style="font-size: 2.5rem; margin-top: 1rem;"></h2>
     </header>
     <main>
-      <button id="btn-continuar-para-niveis">Escolher Nível e Começar</button>
+      <button id="btn-continuar-para-niveis" class="btn-solid">Escolher Nível e Começar</button>
       <button id="btn-ver-outros-temas" class="btn-voltar">Ou ver outros temas</button>
     </main>
   </div>
@@ -117,7 +118,7 @@
       </div>
       <div id="container-opcoes"></div>
     </main>
-    <button id="btn-proxima-pergunta" style="display: none;">Próxima</button>
+    <button id="btn-proxima-pergunta" class="btn-solid" style="display: none;">Próxima</button>
     <button id="btn-voltar-do-quiz" class="btn-voltar">Sair do Quiz</button>
   </div>
 
@@ -129,7 +130,7 @@
     </header>
     <main id="form-ranking">
       <input type="text" id="input-nome-jogador" placeholder="Digite seu nome para o ranking">
-      <button id="btn-salvar-pontuacao">Salvar e Ver Ranking</button>
+      <button id="btn-salvar-pontuacao" class="btn-solid">Salvar e Ver Ranking</button>
     </main>
     <button id="btn-jogar-novamente-resultado" class="btn-voltar">Jogar Novamente</button>
   </div>
@@ -146,9 +147,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
   <script src="js/firebase-config.js"></script>
-
   <script src="js/questoes.js"></script>
   <script src="js/script.js"></script>
 </body>
