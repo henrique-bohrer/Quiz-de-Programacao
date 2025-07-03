@@ -1,7 +1,6 @@
 // --- INICIALIZAÇÃO DO FIREBASE ---
-// Garanta que o objeto 'firebaseConfig' esteja definido no seu arquivo firebase-config.js
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database(); // Referência para o nosso Realtime Database
+const db = firebase.database();
 
 // --- SELEÇÃO DE ELEMENTOS DO HTML ---
 const telaInicial = document.getElementById('tela-inicial');
@@ -12,6 +11,7 @@ const telaResultado = document.getElementById('tela-resultado');
 const telaAvaliacao = document.getElementById('tela-avaliacao');
 const telaResultadoAvaliacao = document.getElementById('tela-resultado-avaliacao');
 const telaRanking = document.getElementById('tela-ranking');
+const backgroundIconsContainer = document.getElementById('background-icons');
 
 const btnIniciarAvaliacao = document.getElementById('btn-iniciar-avaliacao');
 const btnIrParaTemas = document.getElementById('btn-ir-para-temas');
@@ -52,8 +52,20 @@ const gameState = {
 
 // --- FUNÇÕES GERAIS ---
 function mostrarTela(telaParaMostrar) {
-    todasAsTelas.forEach(tela => tela.classList.add('escondido'));
-    telaParaMostrar.classList.remove('escondido');
+    const telaAtual = todasAsTelas.find(tela => !tela.classList.contains('escondido'));
+
+    if (telaAtual) {
+        telaAtual.classList.add('fade-out');
+        setTimeout(() => {
+            telaAtual.classList.add('escondido');
+            telaAtual.classList.remove('fade-out');
+            telaParaMostrar.classList.remove('escondido');
+            telaParaMostrar.classList.add('fade-in');
+        }, 300);
+    } else {
+        telaParaMostrar.classList.remove('escondido');
+        telaParaMostrar.classList.add('fade-in');
+    }
 }
 
 function resetarJogo() {
@@ -61,10 +73,47 @@ function resetarJogo() {
     gameState.opcaoSelecionadaIndex = null; gameState.perguntaAtualAvaliacao = 0;
     gameState.pontosAvaliacao = { dados: 0, frontend: 0, backend: 0, devops: 0 }; gameState.multiplicador = 1;
     document.body.removeAttribute('data-active-theme');
+    atualizarLogo(null);
+    gerarIconesDeFundo(null);
     mostrarTela(telaInicial);
 }
 
+function atualizarLogo(tema) {
+    const todosOsLogos = document.querySelectorAll('.navbar-logo');
+    todosOsLogos.forEach(logo => logo.classList.remove('active-logo'));
+    const logoAtivo = document.querySelector(tema ? `.navbar-logo[src*="${tema}"]` : '.logo-default');
+    if (logoAtivo) {
+        logoAtivo.classList.add('active-logo');
+    } else {
+        document.querySelector('.logo-default').classList.add('active-logo');
+    }
+}
+
+function gerarIconesDeFundo(tema) {
+    backgroundIconsContainer.innerHTML = '';
+    if (!tema) return;
+    const iconesPorTema = {
+        dados: ['fa-database', 'fa-chart-bar', 'fa-table', 'fa-cogs'],
+        frontend: ['fa-code', 'fa-css3-alt', 'fa-html5', 'fa-js-square'],
+        backend: ['fa-server', 'fa-database', 'fa-code-branch', 'fa-bolt'],
+        devops: ['fa-cloud-upload-alt', 'fa-docker', 'fa-infinity', 'fa-git-alt']
+    };
+    const iconesDoTema = iconesPorTema[tema];
+    if (!iconesDoTema) return;
+    for (let i = 0; i < 15; i++) {
+        const icon = document.createElement('i');
+        const randomIcon = iconesDoTema[Math.floor(Math.random() * iconesDoTema.length)];
+        icon.className = `fas ${randomIcon}`;
+        icon.style.top = `${Math.random() * 100}vh`;
+        icon.style.left = `${Math.random() * 100}vw`;
+        icon.style.fontSize = `${Math.random() * 10 + 5}rem`;
+        icon.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        backgroundIconsContainer.appendChild(icon);
+    }
+}
+
 // --- FUNÇÕES DO QUIZ PRINCIPAL ---
+// (As funções carregarProximaPergunta, selecionarOpcao, checarResposta, e finalizarQuiz continuam aqui, sem alterações)
 function carregarProximaPergunta() {
     gameState.opcaoSelecionadaIndex = null;
     btnProximaPergunta.style.display = 'none';
@@ -87,7 +136,6 @@ function carregarProximaPergunta() {
         containerOpcoes.appendChild(botao);
     });
 }
-
 function selecionarOpcao(botaoClicado, index) {
     gameState.opcaoSelecionadaIndex = index;
     const todosOsBotoes = containerOpcoes.querySelectorAll('.btn-opcao');
@@ -95,17 +143,13 @@ function selecionarOpcao(botaoClicado, index) {
     botaoClicado.classList.add('selecionada');
     btnProximaPergunta.style.display = 'block';
 }
-
 function checarResposta() {
     const { tema, nivel, perguntaAtual, opcaoSelecionadaIndex, multiplicador } = gameState;
     const perguntaObj = bancoDeQuestoes[tema][nivel][perguntaAtual];
     const respostaCorretaIndex = perguntaObj.resposta;
     const todosOsBotoes = containerOpcoes.querySelectorAll('.btn-opcao');
     const botaoSelecionado = todosOsBotoes[opcaoSelecionadaIndex];
-    todosOsBotoes.forEach(btn => {
-        btn.disabled = true;
-        btn.classList.remove('selecionada');
-    });
+    todosOsBotoes.forEach(btn => { btn.disabled = true; btn.classList.remove('selecionada'); });
     if (opcaoSelecionadaIndex === respostaCorretaIndex) {
         botaoSelecionado.classList.add('correta');
         gameState.pontuacao += (10 * multiplicador);
@@ -116,20 +160,20 @@ function checarResposta() {
     }
     btnProximaPergunta.textContent = 'Próxima Pergunta';
 }
-
 function finalizarQuiz() {
     pontuacaoFinalDisplay.textContent = gameState.pontuacao;
     mostrarTela(telaResultado);
 }
 
+
 // --- FUNÇÕES DO TESTE DE AVALIAÇÃO ---
+// (As funções iniciarTesteAvaliacao, carregarPerguntaAvaliacao, registrarRespostaAvaliacao, e finalizarTesteAvaliacao continuam aqui, sem alterações)
 function iniciarTesteAvaliacao() {
     gameState.perguntaAtualAvaliacao = 0;
     gameState.pontosAvaliacao = { dados: 0, frontend: 0, backend: 0, devops: 0 };
     mostrarTela(telaAvaliacao);
     carregarPerguntaAvaliacao();
 }
-
 function carregarPerguntaAvaliacao() {
     const perguntaObj = testeAvaliacao[gameState.perguntaAtualAvaliacao];
     textoPerguntaAvaliacao.textContent = perguntaObj.pergunta;
@@ -142,7 +186,6 @@ function carregarPerguntaAvaliacao() {
         containerOpcoesAvaliacao.appendChild(botao);
     });
 }
-
 function registrarRespostaAvaliacao(tema) {
     gameState.pontosAvaliacao[tema]++;
     gameState.perguntaAtualAvaliacao++;
@@ -152,18 +195,21 @@ function registrarRespostaAvaliacao(tema) {
         finalizarTesteAvaliacao();
     }
 }
-
 function finalizarTesteAvaliacao() {
     const pontos = gameState.pontosAvaliacao;
     let temaSugerido = Object.keys(pontos).reduce((a, b) => pontos[a] > pontos[b] ? a : b);
     gameState.tema = temaSugerido;
     const temaFormatado = temaSugerido.charAt(0).toUpperCase() + temaSugerido.slice(1);
     document.body.setAttribute('data-active-theme', temaSugerido);
+    atualizarLogo(temaSugerido);
+    gerarIconesDeFundo(temaSugerido);
     temaSugeridoDisplay.textContent = temaFormatado;
     mostrarTela(telaResultadoAvaliacao);
 }
 
+
 // --- FUNÇÕES DO RANKING (FIREBASE) ---
+// (As funções salvarPontuacao e mostrarRanking continuam aqui, sem alterações)
 function salvarPontuacao() {
     const nomeJogador = inputNomeJogador.value.trim();
     if (!nomeJogador) { alert("Por favor, digite um nome!"); return; }
@@ -174,17 +220,8 @@ function salvarPontuacao() {
         pontuacaoNegativa: -gameState.pontuacao
     };
     const novaPontuacaoRef = db.ref('ranking').push();
-    novaPontuacaoRef.set(novaPontuacao)
-        .then(() => {
-            console.log("Pontuação salva com sucesso!");
-            mostrarRanking();
-        })
-        .catch((error) => {
-            console.error("Erro ao salvar pontuação: ", error);
-            alert("Não foi possível salvar sua pontuação. Tente novamente.");
-        });
+    novaPontuacaoRef.set(novaPontuacao).then(() => { console.log("Pontuação salva com sucesso!"); mostrarRanking(); }).catch((error) => { console.error("Erro ao salvar pontuação: ", error); alert("Não foi possível salvar sua pontuação. Tente novamente."); });
 }
-
 function mostrarRanking() {
     const rankingRef = db.ref('ranking');
     const consultaRanking = rankingRef.orderByChild('pontuacaoNegativa').limitToFirst(10);
@@ -197,28 +234,23 @@ function mostrarRanking() {
             snapshot.forEach((childSnapshot) => { ranking.push(childSnapshot.val()); });
             ranking.forEach((item, index) => {
                 const li = document.createElement('li');
-                li.innerHTML = `
-                    <span class="ranking-nome">${index + 1}. ${item.nome}</span>
-                    <div class="ranking-info">
-                        <span>${item.tema} (${item.nivel})</span>
-                        <span class="ranking-pontos">${item.pontuacao} pts</span>
-                    </div>
-                `;
+                li.innerHTML = ` <span class="ranking-nome">${index + 1}. ${item.nome}</span> <div class="ranking-info"> <span>${item.tema} (${item.nivel})</span> <span class="ranking-pontos">${item.pontuacao} pts</span> </div> `;
                 listaRanking.appendChild(li);
             });
         }
-    }, (error) => {
-        console.error("Erro ao carregar o ranking: ", error);
-        listaRanking.innerHTML = '<li><p>Não foi possível carregar o ranking.</p></li>';
-    });
+    }, (error) => { console.error("Erro ao carregar o ranking: ", error); listaRanking.innerHTML = '<li><p>Não foi possível carregar o ranking.</p></li>'; });
+    atualizarLogo(null);
+    gerarIconesDeFundo(null);
     mostrarTela(telaRanking);
 }
 
+
 // --- LÓGICA DE NAVEGAÇÃO E EVENT LISTENERS ---
+// (Todos os addEventListeners continuam aqui, sem alterações, mas com as chamadas para atualizarLogo e gerarIconesDeFundo)
 btnIniciarAvaliacao.addEventListener('click', iniciarTesteAvaliacao);
-btnIrParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
+btnIrParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); atualizarLogo(null); gerarIconesDeFundo(null); mostrarTela(telaTemas); });
 btnJogarNovamenteResultado.addEventListener('click', resetarJogo);
-btnVoltarParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
+btnVoltarParaTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); atualizarLogo(null); gerarIconesDeFundo(null); mostrarTela(telaTemas); });
 btnVoltarDoQuiz.addEventListener('click', () => mostrarTela(telaNiveis));
 btnVoltarParaAvaliacao.addEventListener('click', resetarJogo);
 btnContinuarParaNiveis.addEventListener('click', () => {
@@ -226,7 +258,7 @@ btnContinuarParaNiveis.addEventListener('click', () => {
     tituloTemaSelecionado.textContent = `Tema: ${temaFormatado}`;
     mostrarTela(telaNiveis);
 });
-btnVerOutrosTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); mostrarTela(telaTemas); });
+btnVerOutrosTemas.addEventListener('click', () => { document.body.removeAttribute('data-active-theme'); atualizarLogo(null); gerarIconesDeFundo(null); mostrarTela(telaTemas); });
 btnSalvarPontuacao.addEventListener('click', salvarPontuacao);
 btnVerRanking.addEventListener('click', mostrarRanking);
 btnVoltarDoRanking.addEventListener('click', resetarJogo);
@@ -239,12 +271,13 @@ botoesTema.forEach(botao => {
         const temaEscolhido = botao.dataset.tema;
         gameState.tema = temaEscolhido;
         document.body.setAttribute('data-active-theme', temaEscolhido);
+        atualizarLogo(temaEscolhido);
+        gerarIconesDeFundo(temaEscolhido);
         const temaFormatado = temaEscolhido.charAt(0).toUpperCase() + temaEscolhido.slice(1);
         tituloTemaSelecionado.textContent = `Tema: ${temaFormatado}`;
         mostrarTela(telaNiveis);
     });
 });
-
 const botoesNivel = niveisContainer.querySelectorAll('.btn-selecao[data-nivel]');
 botoesNivel.forEach(botao => {
     botao.addEventListener('click', () => {
@@ -258,7 +291,6 @@ botoesNivel.forEach(botao => {
         carregarProximaPergunta();
     });
 });
-
 btnProximaPergunta.addEventListener('click', () => {
     if (btnProximaPergunta.textContent === 'Confirmar Resposta') {
         if (gameState.opcaoSelecionadaIndex !== null) { checarResposta(); }
@@ -273,6 +305,7 @@ btnProximaPergunta.addEventListener('click', () => {
         }
     }
 });
+
 
 // --- LÓGICA INICIAL DO JOGO ---
 resetarJogo();
