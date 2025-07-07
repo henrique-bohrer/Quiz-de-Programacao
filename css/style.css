@@ -91,7 +91,7 @@
 
    /* Contêiner dos ícones de fundo */
    #background-icons { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; overflow: hidden; }
-   #background-icons i { position: absolute; color: var(--cor-acento); opacity: 0.05; animation: float 20s ease-in-out infinite; pointer-events: none; transition: color 0.4s ease; }
+   #background-icons i { position: absolute; color: var(--cor-acento); animation: float 20s ease-in-out infinite; pointer-events: none; transition: color 0.4s ease; }
 
 
    /* ==========================================================================
@@ -162,6 +162,30 @@
    input[type=text]:focus { outline: 0; border-color: var(--cor-acento); box-shadow: 0 0 15px rgba(var(--cor-acento-rgb),0.3); }
 
    #btn-proxima-pergunta { margin-top: 2rem; }
+
+   textarea {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--cor-card-borda);
+    color: var(--cor-texto-principal);
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif; /* Garante a mesma fonte */
+    resize: vertical; /* Permite redimensionar apenas na vertical */
+    transition: all 0.2s ease;
+}
+
+textarea::placeholder {
+    color: var(--cor-texto-secundario);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--cor-acento);
+    box-shadow: 0 0 15px rgba(var(--cor-acento-rgb), 0.3);
+}
 
    /* --- Navbar --- */
    .navbar { position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(10,10,26,0.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--cor-card-borda); }
