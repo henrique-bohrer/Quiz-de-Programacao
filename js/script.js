@@ -124,11 +124,13 @@ function gerarIconesDeFundo(tema) {
 }
 
 function embaralharArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+    // Cria uma cópia do array para não modificar o original
+    let arrayCopiado = [...array];
+    for (let i = arrayCopiado.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [arrayCopiado[i], arrayCopiado[j]] = [arrayCopiado[j], arrayCopiado[i]];
     }
-    return array;
+    return arrayCopiado;
 }
 
 // --- FUNÇÕES DO QUIZ PRINCIPAL ---
@@ -321,17 +323,18 @@ botoesNivel.forEach(botao => {
         gameState.multiplicador = parseFloat(botao.dataset.multiplicador);
 
         const perguntasOriginais = bancoDeQuestoes[gameState.tema]?.[gameState.nivel] || [];
-        if(perguntasOriginais.length === 0){
-             alert(`Desculpe, ainda não há perguntas para o tema '${gameState.tema}' no nível '${gameState.nivel}'. Voltando ao início.`);
-             resetarJogo();
+        if(perguntasOriginais.length < 1){
+             alert(`Desculpe, ainda não há perguntas para o tema '${gameState.tema}' no nível '${gameState.nivel}'.`);
              return;
         }
-        gameState.perguntasAtuais = embaralharArray([...perguntasOriginais]);
+
+        gameState.perguntasAtuais = embaralharArray(perguntasOriginais);
 
         const temaFormatado = gameState.tema.charAt(0).toUpperCase() + gameState.tema.slice(1);
         const nivelFormatado = gameState.nivel.charAt(0).toUpperCase() + gameState.nivel.slice(1);
         infoQuiz.textContent = `Tema: ${temaFormatado} | Nível: ${nivelFormatado}`;
         pontuacaoDisplay.textContent = `Pontos: 0`;
+        gameState.perguntaAtual = 0;
 
         mostrarTela(telaQuiz);
         carregarProximaPergunta();
