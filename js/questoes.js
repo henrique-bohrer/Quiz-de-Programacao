@@ -29,36 +29,218 @@ const testeAvaliacao = [
 ];
 
 const bancoDeQuestoes = {
-    dados: {
-        estagiario: [
-            { pergunta: "O que é um 'Banco de Dados'?", opcoes: ["Um software para edição de texto avançado", "Um tipo de memória volátil para computadores", "Uma coleção estruturada de dados armazenados eletronicamente", "Um componente de hardware para processamento gráfico"], resposta: 2 },
-            { pergunta: "Qual o principal objetivo de uma cláusula `WHERE` em SQL?", opcoes: ["Agrupar linhas com valores idênticos", "Filtrar registros com base em uma condição específica", "Ordenar os registros em ordem ascendente ou descendente", "Unir dados de duas ou mais tabelas relacionadas"], resposta: 1 },
-            { pergunta: "Qual tipo de dado é mais apropriado para armazenar uma data de nascimento?", opcoes: ["STRING", "NUMBER", "BOOLEAN", "DATE"], resposta: 3 },
-            { pergunta: "O que significa a sigla SQL?", opcoes: ["Standard Question Language", "Scripted Query Language", "Structured Query Language", "System Query Language"], resposta: 2 },
-            { pergunta: "O que é uma 'tabela' em um banco de dados relacional?", opcoes: ["Um arquivo de log do sistema", "Uma coleção de dados sobre um tópico específico, organizada em linhas e colunas", "Um gráfico que representa a performance do banco", "Um comando para deletar informações do banco"], resposta: 1 }
-        ],
-        junior: [
-            { pergunta: "Qual comando SQL é usado para adicionar novas linhas a uma tabela?", opcoes: ["ADD ROW", "CREATE DATA", "INSERT INTO", "UPDATE TABLE"], resposta: 2 },
-            { pergunta: "Em Python, qual biblioteca é fundamental para a computação numérica, sendo base para muitas outras como a Pandas?", opcoes: ["NumPy", "Matplotlib", "Requests", "Django"], resposta: 0 },
-            { pergunta: "O que significa 'ETL' no contexto de dados?", opcoes: ["Execute, Test, Launch", "Extract, Transform, Load", "Export, Transmit, Link", "Evaluate, Track, Log"], resposta: 1 },
-            { pergunta: "Qual a diferença entre `INNER JOIN` e `LEFT JOIN`?", opcoes: ["São iguais, apenas com sintaxe diferente", "`INNER JOIN` retorna apenas as linhas com correspondência em ambas as tabelas", "`LEFT JOIN` retorna todas as linhas da tabela da direita, mesmo sem correspondência", "`INNER JOIN` é usado para criar tabelas, e `LEFT JOIN` para atualizá-las"], resposta: 1 },
-            { pergunta: "Para que serve um índice em um banco de dados?", opcoes: ["Para gerar relatórios automáticos sobre os dados", "Para criar um resumo executivo dos conteúdos da tabela", "Para criar uma estrutura de dados que acelera a velocidade das operações de busca", "Para criptografar os dados sensíveis de uma coluna específica"], resposta: 2 }
-        ],
-        pleno: [
-             { pergunta: "Quando você usaria uma `Window Function` como `ROW_NUMBER()` ou `LAG()`?", opcoes: ["Para deletar linhas duplicadas de forma eficiente", "Para realizar cálculos em um conjunto de linhas que estão relacionadas à linha atual", "Exclusivamente para ordenar dados por uma data específica", "Para criar novas tabelas temporárias com base em uma seleção"], resposta: 1 },
-             { pergunta: "Qual a finalidade de um `Data Warehouse`?", opcoes: ["Servir como um banco de dados transacional de alta velocidade para aplicações web", "Armazenar dados de múltiplas fontes para otimizar a análise e a tomada de decisão (BI)", "Ser um repositório de arquivos de backup criptografados da empresa", "Gerenciar o fluxo de e-mails e comunicação interna da corporação"], resposta: 1 },
-             { pergunta: "Em SQL, o que a cláusula `HAVING` faz que a cláusula `WHERE` não pode fazer?", opcoes: ["Filtrar dados usando operadores lógicos como AND e OR", "Filtrar os resultados de uma consulta após a aplicação de funções de agregação", "Selecionar colunas específicas de uma tabela para exibição", "Renomear colunas no resultado final da consulta"], resposta: 1 },
-             { pergunta: "O que é uma CTE (Common Table Expression) em SQL?", opcoes: ["Uma tabela física permanente que armazena resultados de queries complexas", "Um conjunto de resultados nomeado e temporário que existe apenas no escopo de uma única instrução", "Um tipo de backup incremental automático para tabelas", "Uma função de agregação para calcular médias ponderadas"], resposta: 1 },
-             { pergunta: "O que é 'modelagem de dados'?", opcoes: ["O processo de desenhar a interface visual para exibir os dados", "O processo de criar um modelo conceitual e lógico de como os dados se relacionam e são armazenados", "A atividade de limpar e preparar dados para análise estatística", "A criptografia dos dados para garantir a segurança da informação"], resposta: 1 }
-        ],
-        senior: [
-            { pergunta: "Em que cenário a desnormalização de um banco de dados é uma estratégia defensável?", opcoes: ["Sempre, pois simplifica a escrita de queries", "Em sistemas OLTP de alta transação, para garantir a máxima integridade dos dados", "Em sistemas de Data Warehouse (OLAP), para melhorar a performance de leitura e agregação", "Nunca, pois a normalização é uma regra absoluta do design de bancos de dados"], resposta: 2 },
-            { pergunta: "Qual a principal implicação do Teorema CAP para um sistema de banco de dados distribuído?", opcoes: ["Que é possível garantir 100% de Consistência, Disponibilidade e Tolerância a Partição simultaneamente", "Que, na presença de uma partição de rede, um sistema deve escolher entre ser consistente ou estar disponível", "Que a performance do sistema é inversamente proporcional à quantidade de dados armazenados", "Que todos os dados devem ser criptografados para garantir a consistência entre os nós"], resposta: 1 },
-            { pergunta: "O que diferencia um processo de ETL de um processo de ELT?", opcoes: ["ETL é mais moderno e usa a nuvem, ELT é mais antigo e local", "Em ETL, a transformação ocorre em um servidor intermediário antes do carregamento; em ELT, os dados brutos são carregados e transformados depois, já no Data Warehouse", "ETL é para Big Data, ELT para bancos de dados pequenos", "Não há diferença prática, são apenas siglas diferentes para o mesmo processo"], resposta: 1 },
-            { pergunta: "Qual a principal diferença entre um Data Lake e um Data Warehouse?", opcoes: ["Um Data Lake armazena apenas dados estruturados como tabelas SQL", "Um Data Warehouse é ideal para armazenar dados brutos e não estruturados, como vídeos e logs", "Um Data Lake armazena dados brutos em seu formato nativo, enquanto um Data Warehouse armazena dados já processados e estruturados para análise", "O custo de armazenamento de um Data Lake é sempre mais alto que o de um Data Warehouse"], resposta: 2 },
-            { pergunta: "O que são as propriedades ACID em um sistema de banco de dados?", opcoes: ["São princípios de design de API (Action, Class, ID, Date)", "São um conjunto de propriedades (Atomicidade, Consistência, Isolamento, Durabilidade) que garantem a confiabilidade das transações", "São métodos de criptografia de dados em repouso", "São tipos de consultas SQL para otimização de performance"], resposta: 1 }
-        ]
-    },
+    // Substitua a seção "dados" do seu bancoDeQuestoes por esta:
+
+dados: {
+    estagiario: [
+        {
+            pergunta: "Um estagiário precisa selecionar apenas os clientes do estado de 'SP' de uma tabela 'CLIENTES'. Qual query SQL ele usaria?",
+            opcoes: [
+                "SELECT * FROM CLIENTES WHERE estado = 'SP';",
+                "GET * FROM CLIENTES FILTER BY estado = 'SP';",
+                "SELECT * FROM CLIENTES AND estado = 'SP';",
+                "FILTER CLIENTES ON estado = 'SP';"
+            ],
+            resposta: 0
+        },
+        {
+            pergunta: "Qual é a principal biblioteca em Python que um estagiário usaria para ler um arquivo CSV e começar a manipular os dados em formato de tabela?",
+            opcoes: [
+                "TensorFlow, para criar redes neurais.",
+                "Requests, para fazer chamadas de API.",
+                "Pandas, para criar e manipular DataFrames.",
+                "Django, para construir aplicações web."
+            ],
+            resposta: 2
+        },
+        {
+            pergunta: "Em estatística descritiva, qual medida representa o valor do 'meio' de um conjunto de dados ordenado?",
+            opcoes: [
+                "A média, que é a soma de todos os valores dividida pelo número de valores.",
+                "A moda, que é o valor que aparece com mais frequência no conjunto.",
+                "A mediana, que é o valor que separa a metade superior da metade inferior.",
+                "O desvio padrão, que mede a dispersão dos dados."
+            ],
+            resposta: 2
+        },
+        {
+            pergunta: "Seu gestor pede uma análise rápida sobre as vendas do último mês, que estão em uma planilha Excel. Qual recurso você usaria para somar as vendas por categoria de produto?",
+            opcoes: [
+                "A função de 'Correção Ortográfica'.",
+                "A criação de um 'Gráfico de Dispersão'.",
+                "A funcionalidade de 'Tabela Dinâmica' (Pivot Table).",
+                "A formatação de 'Cor da Fonte'."
+            ],
+            resposta: 2
+        },
+        {
+            pergunta: "Qual é a função mais básica e essencial do Git para salvar suas alterações locais em um projeto?",
+            opcoes: [
+                "git push",
+                "git commit",
+                "git merge",
+                "git clone"
+            ],
+            resposta: 1
+        }
+    ],
+    junior: [
+        {
+            pergunta: "Um analista de dados júnior precisa criar um dashboard interativo para a equipe de vendas. Qual das seguintes ferramentas seria a mais adequada para essa tarefa?",
+            opcoes: [
+                "Apache Airflow, para orquestração de pipelines.",
+                "Power BI ou Tableau, para visualização de dados e BI.",
+                "VS Code, para edição de código.",
+                "PostgreSQL, um sistema de gerenciamento de banco de dados."
+            ],
+            resposta: 1
+        },
+        {
+            pergunta: "Qual é a etapa 'T' (Transform) em um processo de ETL (Extract, Transform, Load)?",
+            opcoes: [
+                "A extração de dados brutos de diversas fontes.",
+                "O carregamento dos dados em um Data Warehouse.",
+                "A aplicação de regras de negócio, limpeza e enriquecimento dos dados.",
+                "O teste final da integridade dos dados carregados."
+            ],
+            resposta: 2
+        },
+        {
+            pergunta: "Você precisa combinar informações de uma tabela 'Pedidos' com uma tabela 'Clientes' usando um campo em comum. Qual comando SQL é essencial para esta tarefa?",
+            opcoes: [
+                "GROUP BY",
+                "ORDER BY",
+                "JOIN",
+                "UNION"
+            ],
+            resposta: 2
+        },
+        {
+            pergunta: "Um engenheiro de dados júnior precisa armazenar arquivos brutos (JSONs, CSVs) de forma barata e escalável na nuvem antes de processá-los. Qual serviço da AWS é o mais indicado para isso?",
+            opcoes: [
+                "EC2, para máquinas virtuais.",
+                "RDS, para bancos de dados relacionais gerenciados.",
+                "Lambda, para execução de código serverless.",
+                "S3 (Simple Storage Service), para armazenamento de objetos."
+            ],
+            resposta: 3
+        },
+        {
+            pergunta: "Se você e sua equipe estão trabalhando no mesmo código usando Git, qual comando você usa para baixar as atualizações que seus colegas enviaram para o repositório remoto?",
+            opcoes: [
+                "git init",
+                "git commit",
+                "git pull",
+                "git status"
+            ],
+            resposta: 2
+        }
+    ],
+    pleno: [
+         {
+            pergunta: "Um engenheiro de dados pleno precisa agendar e monitorar dezenas de pipelines de ETL complexos que possuem dependências entre si. Qual ferramenta é o padrão da indústria para essa tarefa de orquestração?",
+            opcoes: [
+                "Git/GitHub",
+                "Jupyter Notebook",
+                "Apache Airflow",
+                "Microsoft Excel"
+            ],
+            resposta: 2
+        },
+         {
+            pergunta: "Para calcular um 'total acumulado' (running total) de vendas ao longo do tempo em uma query SQL, qual tipo de função seria mais eficiente e elegante?",
+            opcoes: [
+                "Uma subconsulta correlacionada para cada linha.",
+                "Uma Window Function como `SUM() OVER (ORDER BY data)`.",
+                "Um `GROUP BY` simples na coluna de data.",
+                "Usar `UNION ALL` com a própria tabela múltiplas vezes."
+            ],
+            resposta: 1
+        },
+         {
+            pergunta: "Um cientista de dados pleno precisa treinar um modelo de classificação, mas o dataset está desbalanceado. Qual técnica ele deveria considerar aplicar?",
+            opcoes: [
+                "Aumentar o número de épocas do treinamento.",
+                "Usar técnicas de reamostragem como SMOTE (oversampling) ou RandomUnderSampler.",
+                "Normalizar os dados usando a média e o desvio padrão.",
+                "Remover todas as colunas com valores nulos do dataset."
+            ],
+            resposta: 1
+        },
+         {
+            pergunta: "Qual a finalidade de usar o Docker para um cientista de dados pleno ao compartilhar um projeto de Machine Learning?",
+            opcoes: [
+                "Apenas para escrever o código em Python.",
+                "Para criar um ambiente de desenvolvimento isolado e reprodutível, garantindo que o modelo funcione em qualquer máquina.",
+                "Para visualizar os dados e criar gráficos interativos.",
+                "Para se conectar diretamente ao banco de dados de produção."
+            ],
+            resposta: 1
+        },
+         {
+            pergunta: "Você precisa otimizar uma query SQL lenta em uma tabela com milhões de linhas. Qual das seguintes seria a primeira e mais impactante ação a se considerar?",
+            opcoes: [
+                "Aumentar a memória RAM do servidor do banco de dados.",
+                "Verificar e criar índices nas colunas usadas nas cláusulas `WHERE` e `JOIN`.",
+                "Reescrever a query inteira em outra linguagem de programação.",
+                "Dividir a tabela em várias tabelas menores."
+            ],
+            resposta: 1
+        }
+    ],
+    senior: [
+        {
+            pergunta: "Um arquiteto de dados sênior está projetando uma solução para uma empresa que gera terabytes de dados não estruturados diariamente. Qual abordagem é a mais indicada para o armazenamento inicial desses dados?",
+            opcoes: [
+                "Implementar um Data Lake em um serviço de armazenamento de objetos como AWS S3 ou Google Cloud Storage.",
+                "Criar um grande cluster de banco de dados relacional (SQL) com um esquema rígido para todos os dados.",
+                "Armazenar todos os dados brutos em um único servidor de arquivos local de alta capacidade.",
+                "Converter todos os dados para o formato de planilhas Excel para facilitar a visualização."
+            ],
+            resposta: 0
+        },
+        {
+            pergunta: "Um líder técnico precisa escolher uma ferramenta para processamento de dados distribuído em larga escala. Qual das opções é o padrão de fato da indústria para essa tarefa?",
+            opcoes: [
+                "A biblioteca Pandas do Python.",
+                "Apache Spark.",
+                "Scripts Shell (Bash).",
+                "Microsoft Access."
+            ],
+            resposta: 1
+        },
+        {
+            pergunta: "No contexto de MLOps, para que serve uma ferramenta como o MLflow ou Kubeflow?",
+            opcoes: [
+                "Para escrever o código do modelo de Machine Learning em si.",
+                "Para gerenciar todo o ciclo de vida do modelo, incluindo experimentação, reprodutibilidade, deploy e monitoramento.",
+                "Para criar os dashboards de BI que consomem os resultados do modelo.",
+                "Para realizar a limpeza e a transformação inicial dos dados brutos."
+            ],
+            resposta: 1
+        },
+        {
+            pergunta: "Qual é um dos principais desafios da Governança de Dados em uma grande corporação?",
+            opcoes: [
+                "Escolher a linguagem de programação para os scripts de ETL.",
+                "Garantir a qualidade, consistência, segurança e acessibilidade dos dados em toda a organização.",
+                "Contratar mais estagiários para a equipe de dados.",
+                "Decidir qual ferramenta de BI (Power BI ou Tableau) a empresa deve usar."
+            ],
+            resposta: 1
+        },
+        {
+            pergunta: "Um Cientista de Dados Sênior precisa explicar para a diretoria por que um modelo de Deep Learning é a melhor abordagem para um problema de visão computacional. Qual é o argumento mais forte?",
+            opcoes: [
+                "Porque é a tecnologia mais nova e mais falada no momento.",
+                "Porque o código em TensorFlow/PyTorch é mais fácil de escrever que SQL.",
+                "Porque redes neurais profundas são capazes de aprender hierarquias complexas de features automaticamente a partir de dados brutos (pixels), superando modelos tradicionais em tarefas de imagem.",
+                "Porque o treinamento do modelo pode ser feito em um único computador local sem a necessidade de GPUs."
+            ],
+            resposta: 2
+        }
+    ]
+},
     frontend: {
         estagiario: [
             { pergunta: "O que significa a sigla HTML?", opcoes: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyperlink and Text Management Language", "Home Tool Markup Language"], resposta: 0 },
